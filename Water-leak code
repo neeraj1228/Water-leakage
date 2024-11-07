@@ -1,0 +1,35 @@
+#define BLYNK_PRINT Serial 
+#include <ESP8266WiFi.h>   
+#include <BlynkSimpleEsp8266.h> 
+
+
+char ssid[] = "vivo_y33T";
+char pass[] = "12345678";
+
+
+char auth[] = "";
+
+const int waterSensorPin = D1;  
+int waterStatus;               
+void setup() {
+  Serial.begin(9600);
+  Blynk.begin(auth, ssid, pass);
+
+  pinMode(waterSensorPin, INPUT);
+}
+
+void loop() {
+  Blynk.run();
+
+  waterStatus = digitalRead(waterSensorPin); 
+  
+  if (waterStatus == HIGH) { 
+    Serial.println("Water leak detected!");
+    Blynk.notify("Alert! Water leakage detected!");  
+    delay(10000); 
+  } else {
+    Serial.println("No leak detected.");
+  }
+  
+  delay(2000);
+}
